@@ -6,18 +6,42 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:41:04 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/17 14:29:06 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/20 09:33:23 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-
-std::time_t dateToTimestamp(const std::string& strInput)
+double	ft_strtod(const std::string& str)
 {
-	char	yearStr[5];
-	char	monthStr[3];
-	char	dayStr[3];
+	double result;
+
+	char	*cstr = new char[str.length() + 1];
+	strcpy(cstr, str.c_str());
+	result = strtod (cstr, 0);
+	delete [] cstr;
+	return(result);
+}
+
+void display_data(std::map<int , float> dataBase)
+{
+
+	for (std::map<int , float>::iterator iter = dataBase.begin(); iter != dataBase.end(); ++iter) {
+		std::cout << "Key: " << iter->first << ", Value: " << iter->second << std::endl;
+	}
+}
+
+
+bool isDateValid(const std::string& strInput)
+{
+
+	std::tm date = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+
+	std::cout << "is date valid called on " << strInput << std::endl;
+
+
+
 
 	if (strInput.size() != 10 || strInput[4] != '-' || strInput[7] != '-')
 	{
@@ -25,41 +49,41 @@ std::time_t dateToTimestamp(const std::string& strInput)
 		return(-1);
 	}
 	
-	for (size_t i = 0; i < 4; i++)
-	{
-		if (!isdigit(strInput[i]))
-			return(-1);
-		yearStr[i] = strInput[i]; 		
-	}
-	yearStr[4] = 0;
-	for (size_t i = 0; i < 2; i++)
-	{
-		if (!isdigit(strInput[i+5]))
-			return(-1);
-		yearStr[i] = strInput[i+5]; 		
-	}
-	monthStr[2] = 0;	
-	for (size_t i = 0; i < 2; i++)
-	{
-		if (!isdigit(strInput[i+8]))
-			return(-1);
-		yearStr[i] = strInput[i+8]; 		
-	}
-	dayStr[2] = 0;
-	std::tm date = {0};
-	date.tm_year = 1900 - atoi(yearStr);
-	date.tm_mon = atoi(monthStr);
-	date.tm_mday = atoi(dayStr);
-	return (std::mktime(&date));
-}
+	if (!strptime(strInput.c_str(), "%Y-%m-%d", &date))
+		return(false);
 
+	std::cout << "passed strptime" << std::endl;	
+	
+	std::cout << "values found:" << date.tm_year << date.tm_mon << date.tm_mday << std::endl;	
+
+	//february checks 
+	if (date.tm_year % 4 != 0 || (date.tm_year % 100 == 0 && date.tm_year % 400 != 0))
+		if (date.tm_mon == 3 && date.tm_mday == 29)
+			return false;
+			
+	std::cout << "passed bissextile years" << std::endl;
+
+	if (date.tm_mon == 3 && (date.tm_mday == 30 || date.tm_mday == 31))
+		return false;
+		
+	std::cout << "passed january" << std::endl;
+
+	//30 days month checks
+	if (date.tm_mon == 3 || date.tm_mon == 5 || date.tm_mon == 8 ||  date.tm_mon == 10)
+		if (date.tm_mday == 31)
+			return false;
+			
+	std::cout << "passed 30 days mon" << std::endl;
+
+	return true;
+}
 
 
 void parth_vals()
 {
 	
 	
-	std::map<int , float> dataBase;
+	std::map<std::string , float> dataBase;
 	std::vector<std::vector<std::string> > content;
 	std::vector<std::string> row;
 	std::string line, word;
@@ -91,12 +115,12 @@ void parth_vals()
 	//for(long unsigned int i=1; i < content.size(); i++)
 	for(long unsigned int i=1; i < 10; i++)
 	{
-		size_t pos = 0;
-		char	*cstr = new char[content[i][1].length() + 1];
-		strcpy(cstr, content[i][1].c_str());
-		dataBase[dateToTimestamp(content[i][0])] = strtod (cstr, 0);
-		std::cout<< std::endl ;
+		if (!isDateValid(content[i][0]))
+			return;
+
+		dataBase[content[i][0]] = ft_strtod(content[i][1]);
 	}
+	
 
 	return ;
 }
