@@ -6,11 +6,24 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:41:04 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/20 09:33:23 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/20 09:58:21 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
+
+
+
+
+void bitcoinExchange(const std::string& inputFile)
+{
+	std::map<std::string , float> dataBase = csvToMap("data.csv");
+	std::map<std::string , float> inputData = csvToMap(inputFile);	
+
+	
+}
+
+
 
 double	ft_strtod(const std::string& str)
 {
@@ -37,16 +50,10 @@ bool isDateValid(const std::string& strInput)
 
 	std::tm date = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-
-	std::cout << "is date valid called on " << strInput << std::endl;
-
-
-
-
 	if (strInput.size() != 10 || strInput[4] != '-' || strInput[7] != '-')
 	{
 		std::cout << "wrong format dateToTimeSTamp" << std::endl;
-		return(-1);
+		return(false);
 	}
 	
 	if (!strptime(strInput.c_str(), "%Y-%m-%d", &date))
@@ -79,15 +86,15 @@ bool isDateValid(const std::string& strInput)
 }
 
 
-void parth_vals()
+std::map<std::string, float> csvToMap(const std::string& inputFile)
 {
-	
-	
 	std::map<std::string , float> dataBase;
 	std::vector<std::vector<std::string> > content;
 	std::vector<std::string> row;
 	std::string line, word;
-	std::fstream file ("data.csv", std::ios::in);
+	std::fstream file (inputFile, std::ios::in);
+
+	
 	if(file.is_open())
 	{
 		std::cout << "file opened successfullly" << std::endl;

@@ -6,7 +6,7 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:40:49 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/20 09:28:29 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/20 09:59:28 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,23 @@
 #include <string.h>
 #include <stdlib.h>
 
-class BitcoinExchange
+
+class GradeTooHighException : public std::exception
 {
-private:
-	/* data */
-public:
-	BitcoinExchange(/* args */);
-	~BitcoinExchange();
+	public:
+		virtual const char* what() const throw()
+		{	return ("You should lower your expectations");	}
 };
 
-BitcoinExchange::BitcoinExchange(/* args */)
-{
-}
-
-BitcoinExchange::~BitcoinExchange()
-{
-}
 
 
-void parth_vals();
+
+
+
+
+
+
+
+std::map<std::string, float> csvToMap();
+void bitcoinExchange(const std::string& inputFile);
 bool isDateValid(const std::string& strInput);
