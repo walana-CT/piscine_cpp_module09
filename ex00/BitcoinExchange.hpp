@@ -6,7 +6,7 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:40:49 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/21 10:34:58 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/23 10:19:44 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ class InvalidFormatException : public std::exception
 
 
 std::map<std::string, float> importData();
-void evaluateInput(std::map<std::string , float> dataBase ,const std::string& inputFile);
+void evaluateInput(const std::map<std::string, float>& dataBase ,const std::string& inputFile);
 void bitcoinExchange(const std::string& inputFile);
 bool isDateValid(const std::string& strInput);
