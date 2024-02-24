@@ -6,7 +6,7 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:40:49 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/23 10:19:44 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/23 11:37:19 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-
 class InvalidFileException : public std::exception
 {
 	public:
 		virtual const char* what() const throw()
 		{	return ("couldn't open file");	}
 };
-
 
 class InvalidFormatException : public std::exception
 {
@@ -39,12 +37,7 @@ class InvalidFormatException : public std::exception
 };
 
 
-
-
-
-
-
 std::map<std::string, float> importData();
-void evaluateInput(const std::map<std::string, float>& dataBase ,const std::string& inputFile);
+void evaluateInput(std::map<std::string, float> dataBase ,const std::string& inputFile);
 void bitcoinExchange(const std::string& inputFile);
 bool isDateValid(const std::string& strInput);

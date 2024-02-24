@@ -6,30 +6,28 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:41:04 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/23 10:19:19 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/24 10:10:24 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-
 bool is_number(const std::string& str)
 {
-	double result;
 	char*	pEnd;
 
 	char	*cstr = new char[str.length() + 1];
 	strcpy(cstr, str.c_str());
-	result = strtod (cstr, &pEnd);
+	strtod (cstr, &pEnd);
 	return(*pEnd == 0);	
 }
 
-std::vector<std::vector<std::string> > fileToVect(const std::string inputFile, const char& separator)
+std::vector<std::vector<std::string> > fileToVect(const std::string& inputFile, const char& separator)
 {
 	std::vector<std::vector<std::string> > content;
 	std::vector<std::string> row;
 	std::string line, word;
-	std::fstream file ("data.csv", std::ios::in);
+	std::fstream file (inputFile.c_str(), std::ios::in);
 
 	if(file.is_open())
 	{
@@ -44,7 +42,7 @@ std::vector<std::vector<std::string> > fileToVect(const std::string inputFile, c
 	}
 	else
 	{
-		std::cout << "data.csv" << ": " << std::endl;
+		std::cout << inputFile << ": " << std::endl;
 		throw(InvalidFileException());
 	}
 	file.close();	
@@ -56,7 +54,7 @@ std::vector<std::vector<std::string> > fileToVect(const std::string inputFile, c
 void display_data(std::map<std::string , float> dataBase)
 {
 
-	for (std::map<std::string , float>::iterator iter = dataBase.begin(); iter != dataBase.end(); ++iter) {
+	for (std::map<std::string, float>::iterator iter = dataBase.begin(); iter != dataBase.end(); ++iter) {
 		std::cout << "Key: " << iter->first << ", Value: " << iter->second << std::endl;
 	}
 }
@@ -64,6 +62,9 @@ void display_data(std::map<std::string , float> dataBase)
 void bitcoinExchange(const std::string& inputFile)
 {
 	std::map<std::string , float> dataBase = importData();
+
+	std::cout << "databasesuccessfully imported" << std::endl;
+	
 	evaluateInput(dataBase, inputFile);
 	
 	return ;
@@ -131,12 +132,12 @@ std::map<std::string, float> importData()
 	return (dataBase);
 }
 
-void evaluateInput(const std::map<std::string , float>& dataBase ,const std::string& inputFile)
+void evaluateInput(std::map<std::string , float> dataBase ,const std::string& inputFile)
 {
 	double value;
 	std::vector<std::vector<std::string> > content = fileToVect(inputFile, '|');
 
-	if (content[0].size() != 2 || content[0][0] != "date" || content[0][1] != "exchange_rate")
+	if (content.size() == 0 || content[0].size() != 2 || content[0][0] != "date" || content[0][1] != "exchange_rate")
 	{
 		std::cout << inputFile << ": input data base expect following format: date|value" << std::endl;
 		throw(InvalidFormatException());		
@@ -144,34 +145,24 @@ void evaluateInput(const std::map<std::string , float>& dataBase ,const std::str
 
 	for(long unsigned int i=1; i < content.size(); i++)
 	{
-		
-
 		if (content[i].size() != 2)
-		{
 			std::cout << "Error: " << "line " << i << " should contain 2 elements." << std::endl;
-		}
 		if (!isDateValid(content[i][0]))
-		{
 			std::cout << "Error: " << "line " << i << " invalide date format. (" << content[i][0] << ")" << std::endl;
-		}
 		if (!is_number(content[i][1]))
-		{
-			std::cout << "Error: " << "line " << i << " invalide date format. (" << content[i][0] << ")" << std::endl;
-		}		
-
-
-
+			std::cout << "Error: " << "line " << i << " value is not a number. (" << content[i][1] << ")" << std::endl;	
 		value = ft_strtod(content[i][1]);
-			
 		if (value < 0 || value > 1000)
-		{
-			std::cout << "Error: " << "line " << i << " values should be between 0 and 1000. (" << content[i][i] << ")" << std::endl;
-		}
-
+			std::cout << "Error: " << "line " << i << " values should be between 0 and 1000. (" << content[i][1] << ")" << std::endl;
 		
-		
-		
-
-		
-	}	
+		std::map<std::string, float>::iterator iter = dataBase.end();
+		iter = dataBase.find(content[0][1]);
+		if (iter == dataBase.end() && content[0][1] != iter->first)
+			iter = dataBase.lower_bound(content[0][1]);
+		if (iter == dataBase.end())
+			std::cout << "Error: " << "line " << i << " no value have been found for this key. (" << content[i][0] << ")" << std::endl;
+		else
+			std::cout << content[i][0] << " => " << content[i][1] << " = " << value * iter->second << std::endl;	
+	}
+	return ;
 }
