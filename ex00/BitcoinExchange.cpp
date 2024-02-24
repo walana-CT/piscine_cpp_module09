@@ -6,7 +6,7 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:41:04 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/24 10:10:24 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/24 11:59:43 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 bool is_number(const std::string& str)
 {
-	char*	pEnd;
-
-	char	*cstr = new char[str.length() + 1];
-	strcpy(cstr, str.c_str());
-	strtod (cstr, &pEnd);
-	return(*pEnd == 0);	
+	for (size_t i = 0; i < str.size(); i++)
+		if (!isdigit(str[i]) && str[i] != '.' && str[i] != '-')
+			return false;
+	return true;
 }
 
 std::vector<std::vector<std::string> > fileToVect(const std::string& inputFile, const char& separator)
@@ -51,30 +49,37 @@ std::vector<std::vector<std::string> > fileToVect(const std::string& inputFile, 
 }
 
 
-void display_data(std::map<std::string , float> dataBase)
+/*void display_data(std::map<std::string , float> dataBase)
 {
-
 	for (std::map<std::string, float>::iterator iter = dataBase.begin(); iter != dataBase.end(); ++iter) {
 		std::cout << "Key: " << iter->first << ", Value: " << iter->second << std::endl;
 	}
-}
+}*/
+
+/*void display_array(const std::vector<std::vector<std::string> >& content)
+{
+	for(long unsigned int i=1; i < content.size(); i++)
+	{
+		for (size_t j = 0; j < content[i].size(); j++)
+			std::cout << content[i][j];
+		std::cout << std::endl;
+	}
+}*/
 
 void bitcoinExchange(const std::string& inputFile)
 {
 	std::map<std::string , float> dataBase = importData();
-
-	std::cout << "databasesuccessfully imported" << std::endl;
-	
 	evaluateInput(dataBase, inputFile);
 	
 	return ;
-	//display_data(dataBase);
 }
 
 double	ft_strtod(const std::string& str)
 {
 	double result;
 
+	if (str.empty())
+		return 0;
 	char	*cstr = new char[str.length() + 1];
 	strcpy(cstr, str.c_str());
 	result = strtod (cstr, 0);
@@ -132,37 +137,69 @@ std::map<std::string, float> importData()
 	return (dataBase);
 }
 
+std::string trimSpaces(const std::string& str)
+{
+    size_t start = str.find_first_not_of(" \t\n\r");
+    size_t end = str.find_last_not_of(" \t\n\r");
+    if (start == std::string::npos || end == std::string::npos)
+	{
+		return ("");
+    }
+   	return(str.substr(start, end - start + 1));
+}
+
+bool isContentValid(std::vector<std::vector<std::string> >& content)
+{
+		
+	if (content.size() == 0 || content[0].size() != 2)
+		return false;
+
+	for(size_t i = 0; i < content.size(); i++)
+		for (size_t j = 0; j < content[i].size(); j++)
+			content[i][j] = trimSpaces(content[i][j]);
+
+	if ( content[0][0] != "date" || content[0][1] != "value")
+		return false;
+	
+	return true;
+}
+
 void evaluateInput(std::map<std::string , float> dataBase ,const std::string& inputFile)
 {
-	double value;
+	double	value;
 	std::vector<std::vector<std::string> > content = fileToVect(inputFile, '|');
 
-	if (content.size() == 0 || content[0].size() != 2 || content[0][0] != "date" || content[0][1] != "exchange_rate")
+	if (!isContentValid(content))
 	{
 		std::cout << inputFile << ": input data base expect following format: date|value" << std::endl;
 		throw(InvalidFormatException());		
-	}	
+	}
 
 	for(long unsigned int i=1; i < content.size(); i++)
 	{
-		if (content[i].size() != 2)
-			std::cout << "Error: " << "line " << i << " should contain 2 elements." << std::endl;
+		if (content[i].size() != 2 || content[i][1].empty())
+			{std::cout << "Error: " << "line " << i << " should contain 2 elements." << std::endl; continue;}
 		if (!isDateValid(content[i][0]))
-			std::cout << "Error: " << "line " << i << " invalide date format. (" << content[i][0] << ")" << std::endl;
+			{std::cout << "Error: " << "line " << i << " invalide date format. (" << content[i][0] << ")" << std::endl; continue;}
 		if (!is_number(content[i][1]))
-			std::cout << "Error: " << "line " << i << " value is not a number. (" << content[i][1] << ")" << std::endl;	
+			{std::cout << "Error: " << "line " << i << " value is not a number. (" << content[i][1] << ")" << std::endl; continue;}
 		value = ft_strtod(content[i][1]);
 		if (value < 0 || value > 1000)
-			std::cout << "Error: " << "line " << i << " values should be between 0 and 1000. (" << content[i][1] << ")" << std::endl;
+			{std::cout << "Error: " << "line " << i << " values should be between 0 and 1000. (" << content[i][1] << ")" << std::endl; continue;}
 		
-		std::map<std::string, float>::iterator iter = dataBase.end();
-		iter = dataBase.find(content[0][1]);
-		if (iter == dataBase.end() && content[0][1] != iter->first)
-			iter = dataBase.lower_bound(content[0][1]);
-		if (iter == dataBase.end())
+		std::map<std::string , float>::iterator itTarget = dataBase.end();
+		for (std::map<std::string , float>::iterator it = dataBase.begin(); it != dataBase.end(); it++)
+		{
+			if (content[i][0] == it->first)
+				itTarget = it;
+			else if (content[i][0] < it->first && itTarget->first < it->first)
+				itTarget = it;
+		}
+		
+		if (itTarget == dataBase.end() && itTarget->first != content[i][0])
 			std::cout << "Error: " << "line " << i << " no value have been found for this key. (" << content[i][0] << ")" << std::endl;
 		else
-			std::cout << content[i][0] << " => " << content[i][1] << " = " << value * iter->second << std::endl;	
+			std::cout << content[i][0] << " => " << content[i][1] << " = " << value * itTarget->second << std::endl;			
 	}
 	return ;
 }
