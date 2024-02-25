@@ -6,7 +6,7 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:41:04 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/24 11:59:43 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/25 10:11:11 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,9 +192,11 @@ void evaluateInput(std::map<std::string , float> dataBase ,const std::string& in
 		{
 			if (content[i][0] == it->first)
 				itTarget = it;
-			else if (content[i][0] < it->first && itTarget->first < it->first)
+			else if (content[i][0] > it->first && it->first > itTarget->first)
 				itTarget = it;
 		}
+		
+		std::cout << "searched  date: " << content[i][0] << " found key: " << itTarget->first << std::endl;
 		
 		if (itTarget == dataBase.end() && itTarget->first != content[i][0])
 			std::cout << "Error: " << "line " << i << " no value have been found for this key. (" << content[i][0] << ")" << std::endl;
