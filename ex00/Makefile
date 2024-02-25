@@ -6,7 +6,7 @@
 #    By: rficht <rficht@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/20 09:23:49 by rficht            #+#    #+#              #
-#    Updated: 2024/02/20 09:37:24 by rficht           ###   ########.fr        #
+#    Updated: 2024/02/25 10:32:20 by rficht           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,8 @@ GFLAG = -g3
 #	Sources		#
 #---------------#
 FILES +=	main.cpp\
-	BitcoinExchange.cpp
+	BitcoinExchange.cpp\
+	btcUtils.cpp
 			
 SOURCES = $(FILES)
 OBJ = $(FILES:.cpp=.o)

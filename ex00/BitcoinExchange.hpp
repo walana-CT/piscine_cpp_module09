@@ -6,38 +6,17 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 09:40:49 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/23 11:37:19 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/25 10:31:00 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#ifndef BITCOINEXCHANGE_HPP
+#define BITCOINEXCHANGE_HPP
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <sstream>
-#include <map>
-#include <ctime>
-#include <string.h>
-#include <stdlib.h>
+#include"btcUtils.hpp"
 
-class InvalidFileException : public std::exception
-{
-	public:
-		virtual const char* what() const throw()
-		{	return ("couldn't open file");	}
-};
+std::map<std::string, float>	importData();
+void	evaluateInput(std::map<std::string, float> dataBase ,const std::string& inputFile);
+void	bitcoinExchange(const std::string& inputFile);
 
-class InvalidFormatException : public std::exception
-{
-	public:
-		virtual const char* what() const throw()
-		{	return ("data base does not follow the rules");	}
-};
-
-
-std::map<std::string, float> importData();
-void evaluateInput(std::map<std::string, float> dataBase ,const std::string& inputFile);
-void bitcoinExchange(const std::string& inputFile);
-bool isDateValid(const std::string& strInput);
+#endif

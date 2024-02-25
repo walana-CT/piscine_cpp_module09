@@ -6,7 +6,7 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 11:05:21 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/20 10:27:32 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/25 10:17:02 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,14 @@ int main(int argc, char const *argv[])
 		return 1;
 	}
 	
-	try
-	{
-		bitcoinExchange(argv[1]);
-	}
+	try	
+	{	bitcoinExchange(argv[1]);	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 		return 1;
 	}
 	
-
 	return 0;
 }
 
