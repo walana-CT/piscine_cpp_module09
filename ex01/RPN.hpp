@@ -6,10 +6,11 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/25 10:47:38 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/27 09:51:07 by rficht           ###   ########.fr       */
+/*   Updated: 2024/02/27 16:38:45 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include <stack>
 #include <iostream>
 
