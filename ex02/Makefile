@@ -6,7 +6,7 @@
 #    By: rficht <rficht@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/20 09:23:49 by rficht            #+#    #+#              #
-#    Updated: 2024/02/27 16:59:01 by rficht           ###   ########.fr        #
+#    Updated: 2024/02/28 11:34:10 by rficht           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ RESET	:= \033[0m
 SHELL = /bin/sh
 
 #--- Program name ---#
-NAME = RPN
+NAME = PmergeMe
 
 #--- LIBS ---#
 #--- Includes ---#
@@ -47,6 +47,7 @@ GFLAG = -g3
 #	Sources		#
 #---------------#
 FILES +=	main.cpp\
+			PmergeMe.cpp
 			
 SOURCES = $(FILES)
 OBJ = $(FILES:.cpp=.o)
