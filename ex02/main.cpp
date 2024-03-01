@@ -6,12 +6,11 @@
 /*   By: rficht <rficht@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/27 16:36:08 by rficht            #+#    #+#             */
-/*   Updated: 2024/02/28 11:35:08 by rficht           ###   ########.fr       */
+/*   Updated: 2024/03/01 08:54:28 by rficht           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"PmergeMe.hpp"
-
 
 int main(int argc, char const *argv[])
 {
@@ -49,7 +48,7 @@ int main(int argc, char const *argv[])
 
 	//DEQUE
 	std::cout << "\u001b[1m \u001b[4m Deque: \u001b[0m" << std::endl;
-	std::deque<unsigned int> deq(input.begin(), input.end());	
+	std::deque<unsigned int> deq(input.begin(), input.end());
 	time = clock();	
 	mergeSort(deq);
 	time = clock() - time;
