@@ -6,7 +6,7 @@
 #    By: rficht <rficht@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/20 09:23:49 by rficht            #+#    #+#              #
-#    Updated: 2024/02/27 09:31:19 by rficht           ###   ########.fr        #
+#    Updated: 2024/03/11 09:17:57 by rficht           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,7 +88,8 @@ re: fclean all
 
 #target: dependencies
 #		recipies
+
 # $@ target name
 # $< first dependencie
 # $^ dependencies list
-# $? dependencies that ar more recent than target
+# $? dependencies that are more recent than target
